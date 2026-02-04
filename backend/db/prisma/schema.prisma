@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  name      String
+  comment   String?
+  createdAt DateTime  @default(now())
+  games     Game[]
+  sessions  Session[]
+}
+
+model Game {
+  id         Int         @id @default(autoincrement())
+  level      Int
+  image      String
+  createdAt  DateTime    @default(now())
+  finishedAt DateTime?
+  status     String      @default("IN_PROGRESS")
+  userId     Int
+  characters Character[]
+  user       User        @relation(fields: [userId], references: [id])
+  guesses    Guess[]
+}
+
+model Character {
+  id       Int     @id @default(autoincrement())
+  name     String
+  correctX Int
+  correctY Int
+  gameId   Int
+  game     Game    @relation(fields: [gameId], references: [id])
+  guesses  Guess[]
+}
+
+model Guess {
+  id          Int       @id @default(autoincrement())
+  clickedX    Int
+  clickedY    Int
+  createdAt   DateTime  @default(now())
+  characterId Int
+  gameId      Int
+  character   Character @relation(fields: [characterId], references: [id])
+  game        Game      @relation(fields: [gameId], references: [id])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+  userId    Int? // optional
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
+}
