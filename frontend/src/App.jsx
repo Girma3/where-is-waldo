@@ -1,13 +1,9 @@
-import React from 'react';
-
 function App() {
-
-
   return (
     <>
-    <p>Game start here</p>
+      <h1>Where is Waldo</h1>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

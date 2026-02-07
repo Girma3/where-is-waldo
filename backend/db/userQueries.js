@@ -1,10 +1,13 @@
 import prismaGlobal from "./pool.js";
 
 //function to create user
-async function createUser(user) {
+async function createUser(email, name) {
   try {
     const createdUser = await prismaGlobal.user.create({
-      data: user,
+      data: {
+        email: email,
+        name: name,
+      },
     });
     return createdUser;
   } catch (error) {
@@ -46,5 +49,41 @@ async function getUserByEmail(email) {
     throw error;
   }
 }
+//to remove user from db
+async function deleteUserById(id) {
+  if (!id) {
+    throw new Error("User ID is required for deletion");
+  }
+  try {
+    const user = await prismaGlobal.user.delete({
+      where: { id: id },
+    });
+    return user;
+  } catch (error) {
+    console.error("Error deleting user by id:", error);
+    throw error;
+  }
+}
+async function deleteUserByEmail(email) {
+  if (!email) {
+    throw new Error("User email is required for deletion");
+  }
+  try {
+    const user = await prismaGlobal.user.delete({
+      where: { email: email },
+    });
+    return user;
+  } catch (error) {
+    console.error("Error deleting user by email:", error);
+    throw error;
+  }
+}
 
-export { createUser, getUsers, getUserById, getUserByEmail };
+export {
+  createUser,
+  getUsers,
+  getUserById,
+  getUserByEmail,
+  deleteUserById,
+  deleteUserByEmail,
+};
