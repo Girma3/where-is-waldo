@@ -1,6 +1,7 @@
 import express from "express";
 import request from "supertest";
 import app from "../app.js";
+import { it } from "node:test";
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -51,7 +52,7 @@ describe("Game start api", () => {
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty("isCorrect", false);
   });
-  it("is game end and all character found", async () => {
+  it("is game not ended but the user guess is correct show current game data", async () => {
     const characterId = 1; // assuming character with ID 1 exists in the database
     const gameId = 5;
 
@@ -60,21 +61,21 @@ describe("Game start api", () => {
       .send({ characterId, x: 100, y: 150 });
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty("isCorrect", true);
-    expect(response.body).toHaveProperty("isGameEnded", true);
-    expect(response.body).toHaveProperty("game");
+    expect(response.body).toHaveProperty("userGuess", true);
+    expect(response.body).toHaveProperty("isGameEnded", false);
   });
-  /*
-  it("delete game endpoint", async () => {
-    // First, create a new game to get its id
-    const createResponse = await agent.post("/api/game").send();
-    expect(createResponse.statusCode).toBe(200);
-    const { id } = createResponse.body;
-    expect(id).toBeDefined();
-
-    // Now, delete the created game
-    const response = await agent.delete(`/api/game/delete/${id}`).send();
+  it("show game status", async () => {
+    const gameId = 5;
+    const response = await agent.get(`/api/game/status/${gameId}`);
     expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty("message", "Game deleted");
+    expect(response.body).toHaveProperty("isGameEnded", false);
+    expect(response.body).toHaveProperty("currentGame");
+    expect(response.body.currentGame).toHaveProperty("status", "IN_PROGRESS");
+    expect(response.body.currentGame).toHaveProperty("id");
   });
-  */
+  it("show leaderboard", async () => {
+    const response = await agent.get(`/api/leaderboard`);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty("leaderboard");
+  });
 });
