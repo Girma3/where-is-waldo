@@ -1,7 +1,7 @@
 function App() {
   return (
     <>
-      <h1>Where is Waldo</h1>
+      <h1>where is waldo</h1>
     </>
   );
 }
