@@ -7,13 +7,14 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  name      String
-  comment   String?
-  createdAt DateTime  @default(now())
-  games     Game[]
-  sessions  Session[]
+  id                 Int                @id @default(autoincrement())
+  email              String             @unique
+  name               String
+  comment            String?
+  createdAt          DateTime           @default(now())
+  games              Game[]
+  sessions           Session[]
+  leaderboardEntries LeaderboardEntry[]
 }
 
 model Game {
@@ -26,7 +27,8 @@ model Game {
   userId     Int
   characters Character[]
   user       User        @relation(fields: [userId], references: [id])
-  guesses    Guess[]
+
+  leaderboardEntries LeaderboardEntry[]
 }
 
 model Character {
@@ -35,27 +37,32 @@ model Character {
   correctX Int
   correctY Int
   gameId   Int
+  found    Boolean @default(false)
   game     Game    @relation(fields: [gameId], references: [id])
-  guesses  Guess[]
 }
 
-model Guess {
-  id          Int       @id @default(autoincrement())
-  clickedX    Int
-  clickedY    Int
-  createdAt   DateTime  @default(now())
-  characterId Int
-  gameId      Int
-  character   Character @relation(fields: [characterId], references: [id])
-  game        Game      @relation(fields: [gameId], references: [id])
+model LeaderboardEntry {
+  id         Int      @id @default(autoincrement())
+  level      Int
+  timeTaken  Int
+  achievedAt DateTime @default(now())
+
+  // optional relation
+  userId Int?
+  user   User? @relation(fields: [userId], references: [id])
+
+  // snapshot of name at the time of achievement
+  userName String
+  gameId   Int
+  game     Game   @relation(fields: [gameId], references: [id])
 }
 
 model Session {
-  id        String   @id @default(cuid())
-  sid       String   @unique
-  data      String
-  expiresAt DateTime
-  userId    Int? // optional
+  userId    Int?
   createdAt DateTime @default(now())
+  expiresAt DateTime
+  data      String
+  sid       String   @unique
+  id        String   @id @default(cuid())
   user      User?    @relation(fields: [userId], references: [id])
 }
