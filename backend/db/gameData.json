@@ -1,0 +1,262 @@
+{
+  "games": [
+    {
+      "level": 1,
+      "image": "/easy-level.png",
+      "difficulty": "easy",
+      "characters": [
+        {
+          "name": "Waldo",
+          "icon": "/waldo-icon.png",
+          "correctX": 120,
+          "correctY": 300
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "image": "/field-level.jpg",
+      "difficulty": "medium",
+      "characters": [
+        {
+          "name": "Waldo",
+          "icon": "/waldo-icon.png",
+          "correctX": 120,
+          "correctY": 300
+        },
+        {
+          "name": "Odlaw",
+          "icon": "/odlaw-icon.png",
+          "correctX": 200,
+          "correctY": 500
+        },
+        {
+          "name": "Wenda",
+          "icon": "/wenda-icon.png",
+          "correctX": 600,
+          "correctY": 150
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "image": "/hollywood-level.jpg",
+      "difficulty": "hard",
+      "characters": [
+        {
+          "name": "Waldo",
+          "icon": "/waldo-icon.png",
+          "correctX": 700,
+          "correctY": 250
+        },
+        {
+          "name": "Wizard",
+          "icon": "/wizard-icon.png",
+          "correctX": 350,
+          "correctY": 400
+        },
+
+        {
+          "name": "Odlaw",
+          "icon": "/odlaw-icon.png",
+          "correctX": 150,
+          "correctY": 600
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "image": "/space-level.jpg",
+      "difficulty": "hard",
+      "characters": [
+        {
+          "name": "Waldo",
+          "icon": "/waldo-icon.png",
+          "correctX": 120,
+          "correctY": 300
+        },
+        {
+          "name": "Odlaw",
+          "icon": "/odlaw-icon.png",
+          "correctX": 200,
+          "correctY": 500
+        },
+        {
+          "name": "Wenda",
+          "icon": "/wenda-icon.png",
+          "correctX": 600,
+          "correctY": 150
+        },
+        {
+          "name": "Wizard",
+          "icon": "/wizard-icon.png",
+          "correctX": 350,
+          "correctY": 400
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "image": "/war-level.jpg",
+      "difficulty": "hard",
+      "characters": [
+        {
+          "name": "Waldo",
+          "icon": "/waldo-icon.png",
+          "correctX": 120,
+          "correctY": 300
+        },
+        {
+          "name": "Odlaw",
+          "icon": "/odlaw-icon.png",
+          "correctX": 200,
+          "correctY": 500
+        },
+        {
+          "name": "Wizard",
+          "icon": "/wizard-icon.png",
+          "correctX": 350,
+          "correctY": 400
+        }
+      ]
+    },
+    {
+      "level": 6,
+      "image": "/city-level.jpg",
+      "difficulty": "easy",
+      "characters": [
+        {
+          "name": "Waldo",
+          "icon": "/waldo-icon.png",
+          "correctX": 120,
+          "correctY": 300
+        },
+        {
+          "name": "Odlaw",
+          "icon": "/odlaw-icon.png",
+          "correctX": 200,
+          "correctY": 500
+        },
+        {
+          "name": "Wizard",
+          "icon": "/wizard-icon.png",
+          "correctX": 350,
+          "correctY": 400
+        }
+      ]
+    },
+    {
+      "level": 7,
+      "image": "/circus-level.png",
+      "difficulty": "hard",
+      "characters": [
+        {
+          "name": "Waldo",
+          "icon": "/waldo-icon.png",
+          "correctX": 120,
+          "correctY": 300
+        },
+        {
+          "name": "Odlaw",
+          "icon": "/odlaw-icon.png",
+          "correctX": 200,
+          "correctY": 500
+        },
+        {
+          "name": "Wizard",
+          "icon": "/wizard-icon.png",
+          "correctX": 350,
+          "correctY": 400
+        }
+      ]
+    },
+    {
+      "level": 8,
+      "image": "/sport-level.jpg",
+      "difficulty": "hard",
+      "characters": [
+        {
+          "name": "Waldo",
+          "icon": "/waldo-icon.png",
+          "correctX": 120,
+          "correctY": 300
+        },
+        {
+          "name": "Odlaw",
+          "icon": "/odlaw-icon.png",
+          "correctX": 200,
+          "correctY": 500
+        },
+        {
+          "name": "Wizard",
+          "icon": "/wizard-icon.png",
+          "correctX": 350,
+          "correctY": 400
+        }
+      ]
+    },
+    {
+      "level": 9,
+      "image": "/beach-level.jpg",
+      "difficulty": "medium",
+      "characters": [
+        {
+          "name": "Waldo",
+          "icon": "/waldo-icon.png",
+          "correctX": 120,
+          "correctY": 300
+        },
+        {
+          "name": "Odlaw",
+          "icon": "/odlaw-icon.png",
+          "correctX": 200,
+          "correctY": 500
+        },
+        {
+          "name": "Wizard",
+          "icon": "/wizard-icon.png",
+          "correctX": 350,
+          "correctY": 400
+        }
+      ]
+    },
+    {
+      "level": 10,
+      "image": "/snow-level.png",
+      "difficulty": "easy",
+      "characters": [
+        {
+          "name": "Waldo",
+          "icon": "/waldo-icon.png",
+          "correctX": 120,
+          "correctY": 300
+        }
+      ]
+    },
+    {
+      "level": 11,
+      "image": "/ski-level.jpg",
+      "difficulty": "hard",
+      "characters": [
+        {
+          "name": "Waldo",
+          "icon": "/waldo-icon.png",
+          "correctX": 120,
+          "correctY": 300
+        },
+        {
+          "name": "Odlaw",
+          "icon": "/odlaw-icon.png",
+          "correctX": 200,
+          "correctY": 500
+        },
+        {
+          "name": "Wizard",
+          "icon": "/wizard-icon.png",
+          "correctX": 350,
+          "correctY": 400
+        }
+      ]
+    }
+  ]
+}
