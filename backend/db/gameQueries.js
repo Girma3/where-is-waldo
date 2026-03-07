@@ -54,30 +54,51 @@ async function getGameById(gameId) {
     throw error;
   }
 }
-async function getGameByLevel(level, userId) {
-  //reset the game if there is already same level for the user
+async function findGameByLevel(level, userId) {
   if (!level || !userId) {
     throw new Error("level and userId are required");
   }
   try {
-    const game = await prismaGlobal.game.findFirst({
-      where: { level: level, userId: userId },
+    return await prismaGlobal.game.findFirst({
+      where: { level, userId },
       include: { characters: true },
     });
-    if (!game) {
-      return null;
-    }
-    const updateGame = await prismaGlobal.game.update({
-      where: { id: game.id },
+  } catch (error) {
+    console.error("Error finding game by level:", error);
+    throw error;
+  }
+}
+async function getGameByLevel(level, userId) {
+  if (!level || !userId) {
+    throw new Error("Level and User ID are required");
+  }
+  try {
+    const game = await findGameByLevel(level, userId);
+    if (!game) return null;
+
+    return resetGameById(game.id);
+  } catch (error) {
+    console.error("Error fetching game by level:", error);
+    throw error;
+  }
+}
+
+async function resetGameById(gameId) {
+  if (!gameId) {
+    throw new Error("Game ID is required to reset the game");
+  }
+  try {
+    await prismaGlobal.game.update({
+      where: { id: gameId },
       data: { status: "IN_PROGRESS", createdAt: new Date(), finishedAt: null },
     });
-    const changeCharStatus = await prismaGlobal.character.updateMany({
-      where: { gameId: game.id, found: true },
+    await prismaGlobal.character.updateMany({
+      where: { gameId, found: true },
       data: { found: false },
     });
-    return game;
+    return getGameById(gameId);
   } catch (error) {
-    console.error("Error fetching game data:", error);
+    console.error("Error resetting game:", error);
     throw error;
   }
 }
@@ -193,49 +214,53 @@ async function getLeaderboard(level) {
   }
 }
 //leaderboard only store top 3 for now can be changed if wanted
+//  decide if a score qualifies for leaderboard based on current entries and time taken
+function qualifiesForLeaderboard(leaderboard, timeTaken) {
+  if (leaderboard.length < 3) return true;
+  return timeTaken < leaderboard[leaderboard[leaderboard.length - 1].timeTaken];
+}
+
+// function to add entry and cleanup extras
+async function addLeaderboardEntry(level, timeTaken, userName, gameId) {
+  // Use a transaction to ensure atomicity
+  await prismaGlobal.$transaction(async (prisma) => {
+    // Add the new leaderboard entry
+    await prisma.leaderboardEntry.create({
+      data: { level, timeTaken, userName, gameId },
+    });
+
+    // Find entries exceeding the top 3 (ordered by timeTaken ascending)
+    const extras = await prisma.leaderboardEntry.findMany({
+      where: { level },
+      orderBy: { timeTaken: "asc" },
+      skip: 3,
+      select: { id: true },
+    });
+
+    // Delete extra entries if any
+    if (extras.length > 0) {
+      const idsToDelete = extras.map((entry) => entry.id);
+      await prisma.leaderboardEntry.deleteMany({
+        where: { id: { in: idsToDelete } },
+      });
+    }
+  });
+}
+
+// function to update leaderboard if qualifies
 async function updateLeaderboard(level, timeTaken, userName, gameId) {
-  if (
-    level == null ||
-    userName == null ||
-    timeTaken == null ||
-    gameId == null
-  ) {
-    throw new Error("Level, userName,gameId, and timeTaken are required");
+  if (!level || !userName || !timeTaken || !gameId) {
+    throw new Error("Level, userName, gameId, and timeTaken are required");
   }
 
   try {
-    const leaderBoard = await getLeaderboard(level);
+    const leaderboard = await getLeaderboard(level);
 
-    // if less than 3 entries just add the new one
-    if (leaderBoard.length < 3) {
-      await prismaGlobal.leaderboardEntry.create({
-        data: { level, timeTaken, userName, gameId },
-      });
-      return await getLeaderboard(level);
+    if (qualifiesForLeaderboard(leaderboard, timeTaken)) {
+      await addLeaderboardEntry(level, timeTaken, userName, gameId);
     }
 
-    // check if qualifies for top 3
-    const qualifies = timeTaken < leaderBoard[leaderBoard.length - 1].timeTaken;
-
-    if (qualifies) {
-      await prismaGlobal.leaderboardEntry.create({
-        data: { level, timeTaken, userName, gameId },
-      });
-      //clean up the slowest time
-
-      const extras = await prismaGlobal.leaderboardEntry.findMany({
-        where: { level },
-        orderBy: { timeTaken: "asc" },
-        skip: 3,
-      });
-      const idsToDelete = extras.map((entry) => entry.id);
-      if (idsToDelete.length > 0) {
-        await prismaGlobal.leaderboardEntry.deleteMany({
-          where: { id: { in: idsToDelete } },
-        });
-      }
-    }
-    return await getLeaderboard(level);
+    return getLeaderboard(level);
   } catch (error) {
     console.error("Error updating leaderboard:", error);
     throw error;
