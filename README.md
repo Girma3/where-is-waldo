@@ -1,4 +1,4 @@
-# File - Uploader solution
+# Where is waldo (photo tagging app)
 
 This is a solution to the [Where's Waldo (A Photo Tagging App)challenge from TOP ](https://www.theodinproject.com/lessons/nodejs-where-s-waldo-a-photo-tagging-app).
 
