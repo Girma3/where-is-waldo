@@ -9,8 +9,8 @@ function GameCanvas({
   onCharacterFound,
   onGameEnd,
 }) {
-  const successSound = useRef(new Audio("/success-sound.mp3"));
-  const errorSound = useRef(new Audio("/error-sound.mp3"));
+  const successSound = useRef(new Audio("/sound/success-sound.mp3"));
+  const errorSound = useRef(new Audio("/sound/error-sound.mp3"));
   const [clickCoords, setClickCoords] = useState(null);
   const [pendingCoords, setPendingCoords] = useState(null); // store click until character chosen
   const { mutate: checkLocation } = useCheckLocation();
