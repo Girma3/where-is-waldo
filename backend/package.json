@@ -9,19 +9,21 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js",
-    "test": "jest gameLogic.test.js",
+    "test": "jest --watch --detectOpenHandles authentication.test.js",
     "prisma:generate": "prisma generate --schema=./db/prisma/schema.prisma",
     "prisma:migrate": "prisma migrate dev --schema=./db/prisma/schema.prisma",
     "prisma:push": "prisma db push --schema=./db/prisma/schema.prisma",
-    "prisma:studio": "prisma studio --schema=./db/prisma/schema.prisma"
+    "prisma:studio": "npx prisma studio --schema=db/prisma/schema.prisma"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "@quixo3/prisma-session-store": "^3.1.19",
+    "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
+    "express-validator": "^7.3.1",
     "jsonwebtoken": "^9.0.3",
     "nodemon": "^3.1.11",
     "passport": "^0.7.0",
