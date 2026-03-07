@@ -1,19 +1,17 @@
-import { useMutation } from "@tanstack/react-query";
-const URL = "http://localhost:3000/api/game/leaderboard";
-function useFetchLeaderboard() {
-  const url = `${URL}/:level`;
-  const {
-    mutateAsync: fetchLeaderboard,
-    isLoading,
-    error,
-  } = useMutation(async ({ level }) => {
-    const response = await fetch(url.replace(":level", level));
-    if (!response.ok) {
-      throw new Error(`Failed to get leaderboard for level ${level}`);
-    }
-    return response.json();
+import { useQuery } from "@tanstack/react-query";
+import { fetchLeaderboardByLevel } from "../../game/services/gameApi";
+
+function useFetchLeaderboard(level) {
+  const queryKey = ["leaderboard", level];
+
+  const queryFn = () => fetchLeaderboardByLevel(level);
+
+  const { data, error, isLoading, refetch } = useQuery({
+    queryKey,
+    queryFn,
+    enabled: !!level, // Only run the query if level is provided
   });
 
-  return { fetchLeaderboard, isLoading, error };
+  return { data, error, isLoading, refetch };
 }
 export default useFetchLeaderboard;
