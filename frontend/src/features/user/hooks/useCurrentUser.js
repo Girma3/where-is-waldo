@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function useCurrentUser() {
   return useQuery({
     queryKey: ["currentUser"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:4000/api/currentUser", {
+      const res = await fetch(`${apiUrl}/api/currentUser`, {
         credentials: "include",
       });
 

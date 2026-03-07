@@ -9,7 +9,7 @@ function useSignIn(onSuccessCallback) {
       if (onSuccessCallback) {
         onSuccessCallback();
       }
-      // After sign up, you might want to do something like refetch the user data
+
       queryClient.invalidateQueries(["currentUser"]);
     },
     onError: (error) => {

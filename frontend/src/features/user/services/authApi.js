@@ -1,13 +1,11 @@
-//authentication for user
-//  "sign up new user": "api/user/signup",
-//   login: "api/user/login",
-//   logout: "api/user/logout",
+const apiUrl = import.meta.env.VITE_API_URL;
 
-async function signUpUser({ name: userName, email: userEmail }) {
-  const response = await fetch(`http://localhost:4000/api/user/signup`, {
+async function signUpUser({ name, email }) {
+  const response = await fetch(`${apiUrl}/api/signup`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ userName, userEmail }),
+    body: JSON.stringify({ name, email }),
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -16,11 +14,13 @@ async function signUpUser({ name: userName, email: userEmail }) {
 
   return response.json();
 }
-async function loginUserApi({ name, email }) {
-  const res = await fetch(`http://localhost:4000/api/user/signup`, {
+async function loginUserApi({ email }) {
+  const password = "1234";
+  const res = await fetch(`${apiUrl}/api/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, email }),
+    body: JSON.stringify({ email, password }),
+    credentials: "include",
   });
 
   if (!res.ok) {
@@ -30,7 +30,10 @@ async function loginUserApi({ name, email }) {
 }
 
 async function logoutUserApi() {
-  const res = await fetch("http://localhost:4000/api/user/logout");
+  const res = await fetch(`${apiUrl}/api/logout`, {
+    method: "POST",
+    credentials: "include",
+  });
   if (!res.ok) {
     throw new Error("Failed to logout user");
   }
