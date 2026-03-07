@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import CharacterMenu from "./CharactersMenu";
-import useCheckLocation from "../hooks/useCheckLocation";
-
-function GameCanvas() {
+import useCheckLocation from "../hooks/useCheckLocation.js";
+function GameCanvas({
+  img,
+  imgAlt,
+  characters,
+  gameId,
+  onCharacterFound,
+  onGameEnd,
+}) {
+  const successSound = useRef(new Audio("/success-sound.mp3"));
+  const errorSound = useRef(new Audio("/error-sound.mp3"));
   const [clickCoords, setClickCoords] = useState(null);
   const [pendingCoords, setPendingCoords] = useState(null); // store click until character chosen
-  const checkLocation = useCheckLocation();
+  const { mutate: checkLocation } = useCheckLocation();
 
   const handleImageClick = (e) => {
     const rect = e.target.getBoundingClientRect();
@@ -21,16 +29,29 @@ function GameCanvas() {
   const handleCharacterSelect = (characterId) => {
     if (!pendingCoords) return;
 
-    checkLocation.mutate(
-      { characterId, x: pendingCoords.x, y: pendingCoords.y },
+    checkLocation(
+      { characterId, x: pendingCoords.x, y: pendingCoords.y, gameId },
+
       {
         onSuccess: (data) => {
-          console.log(data);
-          if (data.found) {
-            alert(`You found ${data.character}!`);
+          if (data.isCorrect && data.isGameEnded) {
+            successSound.current.play();
+            onCharacterFound(data.characterId);
+            if (data.nextGame) {
+              const windData = {
+                createdAt: data.currentGame.createdAt,
+                finishedAt: data.currentGame.finishedAt,
+                level: data.nextGame.level,
+              };
+              onGameEnd(windData);
+            }
           } else {
-            alert("Not quite, try again!");
+            errorSound.current.play();
           }
+        },
+        onError: (err) => {
+          errorSound.current.play();
+          console.error(err);
         },
       },
     );
@@ -42,19 +63,20 @@ function GameCanvas() {
   return (
     <div className="relative inline-block cursor-crosshair overflow-hidden">
       <img
-        src="/waldo.png"
-        alt="waldo"
+        src={img}
+        alt={imgAlt}
         className="block max-w-full h-auto"
         onClick={handleImageClick}
       />
       {clickCoords && (
         <div
-          className="absolute border-4 border-dashed border-red-500 w-10 h-10 -ml-5 -mt-5 pointer-events-none"
+          className="absolute border-4 border-dashed border-black-500 w-10 h-10 -ml-5 -mt-5 pointer-events-none"
           style={{ top: `${clickCoords.y}%`, left: `${clickCoords.x}%` }}
         />
       )}
       {clickCoords && (
         <CharacterMenu
+          characters={characters}
           position={clickCoords}
           onSelect={handleCharacterSelect}
         />
