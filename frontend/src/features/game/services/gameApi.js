@@ -1,42 +1,49 @@
-// gameRouter.get("/game/:level", startGame);
-// gameRouter.post(
-//   "/game/guess,
-//   guessCharacterCoordinate,
-// );
-// gameRouter.get("/game/status/:gameId", gameStatusById);
-// gameRouter.get("/game/leaderboard/:level", getLeaderboardByLevel);
-// gameRouter.delete("/game/delete/:id", removeGameById);
-async function startGame(level) {
-  const URL = `http://localhost:4000/api/game/${level}`;
+const apiUrl = import.meta.env.VITE_API_URL;
 
-  const response = await fetch(`${URL}/game`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
+async function fetchAllGames() {
+  const res = await fetch(`${apiUrl}/api/game`, {
+    credentials: "include",
   });
-  if (!response.ok) {
-    throw new Error("Failed to start game");
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch game");
   }
+  return res.json();
+}
+
+async function playGame({ level }) {
+  const url = `${apiUrl}/api/game/${level}`;
+
+  const response = await fetch(`${url}`, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to start game for level ${level}`);
+  }
+
   return response.json();
 }
 async function guessCharacterCoordinate(gameId, characterId, x, y) {
-  const URL = `http://localhost:4000/api/game/${gameId}/character/${characterId}`;
+  const URL = `${apiUrl}/api/game/${gameId}/character/${characterId}`;
 
   const response = await fetch(`${URL}`, {
     method: "POST",
+
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ x, y }),
+    credentials: "include",
   });
+
   if (!response.ok) {
     throw new Error("Failed to guess character coordinate");
   }
   return response.json();
 }
 async function fetchGameStatusById(gameId) {
-  const URL = `http://localhost:4000/api/game/status/${gameId}`;
+  const URL = `${apiUrl}/api/game/status/${gameId}`;
   const response = await fetch(`${URL}`, {
     method: "GET",
     headers: {
@@ -49,7 +56,7 @@ async function fetchGameStatusById(gameId) {
   return response.json();
 }
 async function fetchLeaderboardByLevel(level) {
-  const URL = `http://localhost:4000/api/game/leaderboard/${level}`;
+  const URL = `${apiUrl}/api/game/leaderboard/${level}`;
   const response = await fetch(`${URL}`, {
     method: "GET",
     headers: {
@@ -62,7 +69,7 @@ async function fetchLeaderboardByLevel(level) {
   return response.json();
 }
 async function removeGameById(gameId) {
-  const URL = `http://localhost:4000/api/game/delete/${gameId}`;
+  const URL = `${apiUrl}/api/game/delete/${gameId}`;
   const response = await fetch(`${URL}`, {
     method: "DELETE",
     headers: {
@@ -75,7 +82,8 @@ async function removeGameById(gameId) {
   return response.json();
 }
 export {
-  startGame,
+  fetchAllGames,
+  playGame,
   guessCharacterCoordinate,
   fetchGameStatusById,
   fetchLeaderboardByLevel,
