@@ -8,7 +8,7 @@ function useLogout() {
   return useMutation({
     mutationFn: logoutUserApi,
     onSuccess: () => {
-      queryClient.invalidateQueries(["currentUser"]);
+      queryClient.removeQueries(["currentUser"]);
     },
     onError: (error) => {
       console.error(error);
