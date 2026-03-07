@@ -1,26 +1,16 @@
 import express from "express";
+import {
+  handleLoginRequest,
+  handleSignUp,
+  handleLogout,
+  ValidateLogin,
+  ValidateSignUp,
+} from "../controllers/authController.js";
+
 const authRouter = express.Router();
-import passport from "../authentication/passportConfig.js";
-import isUserAuth from "../authentication/isUserAuth.js";
-authRouter.post("/login", (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) return next(err);
-    if (!user)
-      return res.status(401).json({ message: info?.message || "Login failed" });
+authRouter.post("/signup", ValidateSignUp, handleSignUp);
+authRouter.post("/login", ValidateLogin, handleLoginRequest);
 
-    //  Attach user to session
-    req.login(user, (err) => {
-      if (err) return next(err);
-      return res.status(200).json({ message: "Logged in", user });
-    });
-  })(req, res, next);
-});
-
-authRouter.post("/logout", (req, res) => {
-  req.logout(() => {
-    res.status(200).json({ message: "Logged out" });
-  });
-});
-authRouter.get("/protected", isUserAuth);
+authRouter.post("/logout", handleLogout);
 
 export default authRouter;

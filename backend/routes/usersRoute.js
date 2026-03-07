@@ -1,19 +1,14 @@
 import express from "express";
 import {
   fetchUsers,
-  addUser,
-  logInUser,
-  logOutUser,
   fetchUserById,
   removeUserById,
   removeUserByEmail,
+  getCurrentUser,
 } from "../controllers/userController.js";
 const userRouter = express.Router();
 
-userRouter.post("/signup", addUser);
-userRouter.post("/login", logInUser);
-userRouter.post("/logout", logOutUser);
-
+userRouter.get("/currentUser", getCurrentUser);
 userRouter.get("/users", fetchUsers);
 userRouter.get("/users/:id", fetchUserById);
 userRouter.delete("/users/:id", removeUserById);

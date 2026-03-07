@@ -5,10 +5,12 @@ import {
   guessCharacterCoordinate,
   gameStatusById,
   getLeaderboardByLevel,
+  showAllGames,
 } from "../controllers/gameController.js";
-import isUserAuth from "../authentication/isUserAuth.js";
+
 const gameRouter = express.Router();
 
+gameRouter.get("/game/", showAllGames);
 gameRouter.get("/game/:level", startGame);
 gameRouter.post(
   "/game/:gameId/character/:characterId",
