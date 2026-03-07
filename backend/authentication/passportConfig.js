@@ -1,7 +1,23 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import prismaGlobal from "../db/pool.js";
+
 import { getUserByEmail, getUserById } from "../db/userQueries.js";
+
+export const verifyUser = async (email, password, done) => {
+  try {
+    const user = await getUserByEmail(email);
+
+    if (!user) {
+      return done(null, false, {
+        message: "Incorrect user email",
+      });
+    }
+
+    return done(null, user);
+  } catch (error) {
+    return done(error);
+  }
+};
 
 passport.use(
   new LocalStrategy(
@@ -9,37 +25,22 @@ passport.use(
       usernameField: "email",
       passwordField: "password",
     },
-    (email, password, done) => {
-      (async () => {
-        try {
-          const user = await getUserByEmail(email);
-
-          if (!user) {
-            return done(null, false, { message: "User not found" });
-          }
-
-          return done(null, user);
-        } catch (error) {
-          return done(error);
-        }
-      })();
-    },
+    verifyUser,
   ),
 );
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  return done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
-  (async () => {
-    try {
-      const user = await getUserById(id);
-      done(null, user);
-    } catch (error) {
-      done(error);
-    }
-  })();
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await getUserById(id);
+
+    return done(null, user);
+  } catch (error) {
+    return done(error);
+  }
 });
 
 export default passport;
