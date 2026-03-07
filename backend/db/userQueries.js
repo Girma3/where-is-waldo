@@ -39,6 +39,9 @@ async function getUserById(id) {
 }
 
 async function getUserByEmail(email) {
+  if (!email) {
+    throw new Error("Email is required to find user");
+  }
   try {
     const user = await prismaGlobal.user.findUnique({
       where: { email: email },
