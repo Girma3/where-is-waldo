@@ -49,7 +49,9 @@ function Game() {
     setWindData(data);
     setWinModal(true);
   };
-
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
   if (!data) {
     return (
       <>
@@ -81,7 +83,7 @@ function Game() {
         {characters.map((character, i) => (
           <div key={i}>
             <img
-              src={`/${character.name.toLowerCase()}-icon.png`}
+              src={`/icons/${character.name.toLowerCase()}-icon.png`}
               alt={character.name}
               className="w-6 h-6 inline-block mr-2"
             />

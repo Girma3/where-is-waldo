@@ -17,7 +17,7 @@ const CharacterMenu = ({ characters, position, onSelect }) => {
                   className="w-full text-left px-4 py-2 hover:bg-blue-50 flex items-center gap-3 transition-colors"
                 >
                   <img
-                    src={`/${char.name.toLowerCase()}-icon.png`}
+                    src={`/icons/${char.name.toLowerCase()}-icon.png`}
                     alt={char.name}
                     className="w-6 h-6 rounded-full"
                   />
