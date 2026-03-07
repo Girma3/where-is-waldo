@@ -14,11 +14,11 @@ function useCurrentUser() {
       }
       return res.json();
     },
-    staleTime: Infinity,
-    cacheTime: Infinity,
+
+    //refetch on mount and store it in cache
     refetchOnWindowFocus: false,
-    refetchOnMount: false,
     refetchOnReconnect: false,
+    refetchOnMount: true,
   });
 }
 
